@@ -47,6 +47,17 @@ export default
         cloneDataCluster()
         {
             return structuredClone(dataCluster)
+        },
+        validateForm()
+        {
+            for(const key in this.cloneDataCluster)
+            {
+                if (this.cloneDataCluster[key] !== "") 
+                {
+                    return false;
+                }
+            }
+            return true
         }
     },
     methods:
@@ -67,11 +78,30 @@ export default
         },
         calculateBMI()
         {
+            const flag = this.validateForm
+            alert(flag)
+
+            // calculate cluster1
+            const cl1height = this.cloneDataCluster[1].value
+            const cl1weight = this.cloneDataCluster[2].value
+
+            const cl1bmi = cl1weight / (cl1height * cl1height)
+
+            console.log(cl1bmi)
             
+            // calculate cluster2 
+            const cl2height = this.cloneDataCluster[4].value
+            const cl2weight = this.cloneDataCluster[5].value
+
+            const cl2bmi = cl2weight / (cl2height * cl2height)
+            console.log(cl2bmi)
         },
         compareBMI()
         {
-
+            // Below 18.5: Underweight
+            // 18.5 to 24.9: Normal weight
+            // 25.0 to 29.9: Overweight
+            // 30.0 and above: Obese
         }
     }
 }
