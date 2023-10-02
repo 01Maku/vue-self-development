@@ -1,10 +1,14 @@
 <template lang="en">
     <label>{{ objectTemplate.label }}</label>
-    <input required v-model="provNullModel[cloneObjectTemplate.model]" :type="objectTemplate.type" @change="emitter(cloneObjectTemplate.model, $event.target.value, dataFlag)">
+    <input required v-model="provNullModel[cloneObjectTemplate.model]" :type="objectTemplate.type" :step="objectTemplate.step" @change="emitter(cloneObjectTemplate.model, $event.target.value, dataFlag)">
 </template>
 <script>
 export default
 {
+    emits:
+    [
+        'emitData',
+    ],
     inject:
     [
         'provNullModel',
