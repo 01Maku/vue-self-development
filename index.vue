@@ -14,17 +14,20 @@
                 <input-components v-for="inputObject in localInputTemplate" :key="inputObject" :object-template="inputObject" :data-flag="'dataFlag2'" @emit-data="captureData">
                 </input-components>
             </div>
-            <div class="margin padding flex column" v-for="buttonObject in localButtonTemplate" :key="buttonObject">
-                <button>{{ buttonObject.label }}</button>
+            <div class="margin padding flex column">
+                <button>Calculate</button>
             </div>
         </form>
+        <div class="margin padding flex column">
+            <button>Validate BMI</button>
+        </div>
     </div>
 </template>
 <script>
 // pages
 import inputComponents from '@/components/bmi-calculator/assets/pages/input-components.vue'
 // recipe
-import {inputTemplate, buttonTemplate, nullModel, dataCluster} from '@/components/bmi-calculator/assets/recipe/bmi-recipe.js'
+import {inputTemplate, nullModel, dataCluster, bmiValidator} from '@/components/bmi-calculator/assets/recipe/bmi-recipe.js'
 export default
 {
     provide:
@@ -39,7 +42,7 @@ export default
     {
         return{
             localInputTemplate: inputTemplate,
-            localButtonTemplate: buttonTemplate,
+            localBmiValidator: bmiValidator,
         }
     },
     computed:
@@ -76,32 +79,47 @@ export default
                 }
             });
         },
+        compareBMI(paramBmi)
+        {
+            for(const items of this.localBmiValidator) 
+            {
+                if (items.min <= paramBmi && items.max >= paramBmi) 
+                {
+                    return items.type;
+                }
+            }
+            
+            return 'Unknown Type';
+        },
         calculateBMI()
         {
             const flag = this.validateForm
-            alert(flag)
 
-            // calculate cluster1
-            const cl1height = this.cloneDataCluster[1].value
-            const cl1weight = this.cloneDataCluster[2].value
+            if(!flag)
+            {
+                // calculate cluster1
+                const cl1height = this.cloneDataCluster[1].value
+                const cl1weight = this.cloneDataCluster[2].value
+                const cl1bmi = (cl1weight / (cl1height * cl1height)) * 10000
+                
+                // calculate cluster2 
+                const cl2height = this.cloneDataCluster[4].value
+                const cl2weight = this.cloneDataCluster[5].value
+                const cl2bmi = (cl2weight / (cl2height * cl2height)) * 10000
 
-            const cl1bmi = cl1weight / (cl1height * cl1height)
+                console.log(cl1bmi)
+                console.log(cl2bmi)
 
-            console.log(cl1bmi)
-            
-            // calculate cluster2 
-            const cl2height = this.cloneDataCluster[4].value
-            const cl2weight = this.cloneDataCluster[5].value
+                const bmiType1 = this.compareBMI(cl1bmi)
+                const bmiType2 = this.compareBMI(cl2bmi)
 
-            const cl2bmi = cl2weight / (cl2height * cl2height)
-            console.log(cl2bmi)
-        },
-        compareBMI()
-        {
-            // Below 18.5: Underweight
-            // 18.5 to 24.9: Normal weight
-            // 25.0 to 29.9: Overweight
-            // 30.0 and above: Obese
+                console.log(bmiType1)
+                console.log(bmiType2)
+            }
+            else
+            {
+                alert('Empty Input Fields detected. Please fill out all the fields')
+            }
         }
     }
 }
