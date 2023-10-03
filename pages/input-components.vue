@@ -1,6 +1,6 @@
 <template lang="en">
     <label>{{ objectTemplate.label }}</label>
-    <input required v-model="provNullModel[cloneObjectTemplate.model]" :type="objectTemplate.type" :step="objectTemplate.step" @change="emitter(cloneObjectTemplate.model, $event.target.value, dataFlag)">
+    <input required v-model="cloneNullModel[cloneObjectTemplate.model]" :type="objectTemplate.type" :step="objectTemplate.step" @change="emitter(cloneObjectTemplate.model, $event.target.value, dataFlag)">
 </template>
 <script>
 export default
@@ -32,6 +32,10 @@ export default
         cloneObjectTemplate()
         {
             return structuredClone(this.objectTemplate)
+        },
+        cloneNullModel()
+        {
+            return structuredClone(this.provNullModel)
         }
     },
     methods:
