@@ -15,12 +15,6 @@ const dataCluster =
     {cluster: 'dataFlag2', label: 'Weight (kg)', type: 'number', model: 'inputWeight', value: ''},
 ]
 
-const buttonTemplate =
-[
-    {label: 'Calculate'},
-    {label: 'Compare'},
-]
-
 const nullModel =
 {
     inputName: '',
@@ -28,10 +22,19 @@ const nullModel =
     inputWeight: '',
 }
 
+const bmiValidator =
+[
+    {min: 16, max:18.4, type: 'Underweight'},
+    {min: 18.5, max:24.9, type: 'Normal'},
+    {min: 25, max:29.9, type: 'Overweight'},
+    {min: 30, max:34.9, type: 'Moderately Obese'},
+    {min: 35, max:39.9, type: 'Severely Obese'},
+]
+
 export
 {
     inputTemplate,
-    buttonTemplate,
     nullModel,
-    dataCluster
+    dataCluster,
+    bmiValidator
 }
