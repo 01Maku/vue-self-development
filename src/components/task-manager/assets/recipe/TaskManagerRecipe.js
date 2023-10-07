@@ -74,23 +74,23 @@ const TaskList =
 const TaskTemplate =
 {
     title: null,
-    class: null,
-    model: null,
+    class: 'non-priority',
+    model: 'taskName',
     taskData: 
     [
         {
-            model: null,
-            label: null,
-            value: false,
+            model: 'inputState',
+            label: 'Complete',
+            value: null,
         },
         {
-            model: null,
-            label: null,
-            value: false,
+            model: 'inputPriority',
+            label: 'Task Priority',
+            value: null,
         },
         {
-            model: null,
-            label: null,
+            model: 'inputDescription',
+            label: 'Description',
             value: null,
         },
     ]

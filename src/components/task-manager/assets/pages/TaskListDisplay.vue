@@ -3,7 +3,10 @@
         <div>
             <h3>{{ taskDesignObject.title }}</h3>
         </div>
-        <button class="padding" @click="toggleDetail">Details</button>
+        <div class="flex row justify-center">
+            <button class="margin padding" @click="toggleDetail">Details</button>
+            <button class="margin padding" @click="">Mark as Complete</button>
+        </div>
         <div v-if="displayFlag" class="margin padding flex row" v-for="data in taskDataObject" :key="data">
             <div class="margin padding flex row std-border basis label">
                 <label>{{ data.label }}</label>
@@ -75,6 +78,10 @@ export default
 {
     flex-direction: row;
 }
+.justify-center
+{
+    justify-content: center;
+}
 .std-border
 {
     border-width: 2px;
@@ -90,6 +97,11 @@ export default
 .value
  {
   flex: 1; 
+}
+/* task state indications */
+.complete
+{
+    background-color: #eaf5c7;
 }
 .priority
 {
