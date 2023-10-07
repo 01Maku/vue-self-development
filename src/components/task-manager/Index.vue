@@ -1,47 +1,55 @@
 <template lang="en">
-    <div class="parent-margin padding flex column std-border">
-        <div class="margin padding flex column std-border" v-for="template in localStringPutTemplate" :key="template">
-            <h3>{{ template.label }} &nbsp;</h3>
-            <input required v-model="template.model" :type="template.type">
-        </div>
-        <div class="margin padding flex column std-border">
-            <h3>Is this task a Priority?</h3>
-            <div v-for="template in localRadioPutTemplate" :key="template">
-                <label>{{ template.label }} &nbsp;</label>
-                <input required v-model="template.model" :name="template.name" :type="template.type">
+    <div class="parent-margin padding flex column">
+        <form ref="taskForm" @submit.prevent="addTask">
+            <div class="margin padding flex column std-border">
+                <div class="margin padding flex column" v-for="template in localStringPutTemplate" :key="template">
+                    <h3>{{ template.label }}</h3>
+                    <input required v-model="cloneNullModel[template.model]" @change="captureData(cloneNullModel[template.model])" :type="template.type">
+                </div>
+                <h3>Is this task a Priority?</h3>
+                <div v-for="item in localRadioPutTemplate" :key="item">
+                    <label>{{ item.label }}</label>
+                    <input required v-model="cloneNullModel[item.model]" @click="captureData(item.value)" :name="item.name" :type="item.type">
+                </div>
+                <div class="margin padding flex column">
+                    <h3>Description</h3>
+                    <textarea required v-model="cloneNullModel[textareaNullModel]" @change="captureData(cloneNullModel[textareaNullModel])"></textarea>
+                </div>
+                <div class="margin padding flex column">
+                    <button class="padding">Add Task</button>
+                </div>
             </div>
-        </div>
-        <div class="margin padding flex column std-border">
-            <h3>Description &nbsp;</h3>
-            <textarea></textarea>
-        </div>
-        <div>
+        </form>
+        <div class="margin padding std-border">
             <h3>My Task Lists</h3>
-        </div>
-        <div class="margin padding flex column std-border" v-for="taskObject in cloneTaskList" :key="taskObject">
-            <div>
-                <h3>{{ taskObject.title }}</h3>
-            </div>
-            <div v-if="displayFlag" class="margin padding flex row std-border" v-for="task in taskObject.taskData" :key="task">
-                <label>{{ task.label }} &nbsp;</label>
-                <label>{{ task.value }}</label>
-            </div>
-            <button @click="toggleDetail">Details</button>
+            <task-list-display class="margin padding flex column std-border" v-for="taskObject in cloneTaskList" :key="taskObject"
+                :task-data-object="taskObject.taskData"
+                :task-design-object="{title: taskObject.title, class: taskObject.class}">
+            </task-list-display>
         </div>
     </div>
 </template>
 <script>
-import {TaskList, StringPutTemplate, RadioPutTemplate, NullModel} from '@/components/task-manager/assets/recipe/TaskManagerRecipe.js'
+// pages
+import TaskListDisplay from '@/components/task-manager/assets/pages/TaskListDisplay.vue'
+// object
+import {TaskList, TaskTemplate, StringPutTemplate, RadioPutTemplate, NullModel} from '@/components/task-manager/assets/recipe/TaskManagerRecipe.js'
 export default 
 {
+    name: 'Index',
+    components:
+    {
+        TaskListDisplay,
+    },
     data()
     {
         return{
             localTaskList: TaskList,
+            localTaskTemplate: TaskTemplate,
             localStringPutTemplate: StringPutTemplate,
             localRadioPutTemplate: RadioPutTemplate,
             localNullModel: NullModel,
-            displayFlag: false,
+            textareaNullModel: 'inputDescription',
         }
     },
     computed:
@@ -50,6 +58,10 @@ export default
         {
             return structuredClone(this.localTaskList)
         },
+        cloneTaskTemplate()
+        {
+            return structuredClone(this.localTaskTemplate)
+        },
         cloneNullModel()
         {
             return structuredClone(this.localNullModel)
@@ -57,9 +69,32 @@ export default
     },
     methods:
     {
-        toggleDetail()
+        /**
+         * Parent: <input> | Trigger type: onChange - streams the input value into the cloned template.
+         * @param {String} paramValue - holds the input value from the form.
+         */
+        captureData(paramValue)
+        { 
+            // key iteration of the first level object in the clone array.
+            for(let key in this.cloneTaskTemplate)
+            {
+                if(key == 'title')
+                {
+                    this.cloneTaskTemplate.title = paramValue
+                }
+            }
+
+            // index iteration of the taskData array within the first level object.
+            this.cloneTaskTemplate.taskData.forEach((object, index) => {
+                console.log(object + ' & ' + index) 
+            });
+        },
+        /**
+         * Parent: <button> | Trigger Type: onClick - pushes the cloned template into cloned task list.
+         */
+        addTask()
         {
-            this.displayFlag = !this.displayFlag
+
         }
     }
 }
