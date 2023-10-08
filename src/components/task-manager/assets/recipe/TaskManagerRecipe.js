@@ -2,7 +2,8 @@ const TaskList =
 [
     {
         title: 'Develop Mini App Task Manager',
-        class: 'non-priority',
+        classPriority: 'non-priority',
+        classState: 'pending',
         model: 'taskName',
         taskData: 
         [
@@ -25,7 +26,8 @@ const TaskList =
     },
     {
         title: 'Develop BMI Calculator',
-        class: 'non-priority',
+        classPriority: 'non-priority',
+        classState: 'pending',
         model: 'taskName',
         taskData: 
         [
@@ -48,7 +50,8 @@ const TaskList =
     },
     {
         title: 'Study JavaScript Udemy',
-        class: 'priority',
+        classPriority: 'priority',
+        classState: 'complete',
         model: 'taskName',
         taskData: 
         [
@@ -74,14 +77,15 @@ const TaskList =
 const TaskTemplate =
 {
     title: null,
-    class: 'non-priority',
+    classPriority: 'non-priority',
+    classState: 'pending',
     model: 'taskName',
     taskData: 
     [
         {
             model: 'inputState',
             label: 'Complete',
-            value: null,
+            value: false,
         },
         {
             model: 'inputPriority',

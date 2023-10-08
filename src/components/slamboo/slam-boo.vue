@@ -1,4 +1,5 @@
 <template>
+    <nav-bar></nav-bar>
     <div class="std-padding l15p-margin r15p-margin flex justify-center tp1-border">
         <h1>{{ headTitle }}</h1>
     </div>
@@ -31,6 +32,7 @@
     </div>
 </template>
 <script>
+import NavBar from '@/components/home/NavBar.vue'
 import displayFriend from '@/components/slamboo/assets/pages/display-friend.vue'
 import addFriend from '@/components/slamboo/assets/pages/add-friend.vue'
 import { friendList } from '@/components/slamboo/assets/recipes/slamboo-recipe.js'
@@ -57,6 +59,7 @@ export default
     },
     components:
     {
+        NavBar,
         displayFriend,
         addFriend
     },

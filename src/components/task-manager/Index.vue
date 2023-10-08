@@ -1,4 +1,5 @@
 <template lang="en">
+    <nav-bar></nav-bar>
     <div v-if="newTaskAlertFlag" class="padding parent-margin std-border green-alert">
         <h3>New Task Added! Check your List.</h3>
     </div>
@@ -15,8 +16,8 @@
                     <input required v-model="cloneNullModel[item.model]" @click="captureData(item.value, item.model)" :name="item.name" :type="item.type">
                 </div>
                 <div class="margin padding flex column">
-                    <h3>Description</h3>
-                    <textarea required v-model="cloneNullModel[textareaNullModel]" @change="captureData(cloneNullModel[textareaNullModel], textareaNullModel)"></textarea>
+                    <h3>Description (Maximum of 100 characters)</h3>
+                    <textarea required maxlength="100" v-model="cloneNullModel[textareaNullModel]" @change="captureData(cloneNullModel[textareaNullModel], textareaNullModel)"></textarea>
                 </div>
                 <div class="margin padding flex column">
                     <button class="margin padding">Add Task</button>
@@ -25,15 +26,17 @@
         </form>
         <div class="margin padding std-border">
             <h3>My Task Lists</h3>
-            <task-list-display class="margin padding flex column std-border" v-for="taskObject in cloneTaskList" :key="taskObject"
+            <task-list-display class="margin padding flex column std-border" v-for="(taskObject, index) in cloneTaskList" :key="taskObject"
                 :task-data-object="taskObject.taskData"
-                :task-design-object="{title: taskObject.title, class: taskObject.class}">
+                :task-design-object="{title: taskObject.title, classPriority: taskObject.classPriority, classState: taskObject.classState}"
+                :task-index="index">
             </task-list-display>
         </div>
     </div>
 </template>
 <script>
 // pages
+import NavBar from '@/components/home/NavBar.vue'
 import TaskListDisplay from '@/components/task-manager/assets/pages/TaskListDisplay.vue'
 // object
 import {TaskList, TaskTemplate, StringPutTemplate, RadioPutTemplate, NullModel} from '@/components/task-manager/assets/recipe/TaskManagerRecipe.js'
@@ -42,6 +45,7 @@ export default
     name: 'Index',
     components:
     {
+        NavBar,
         TaskListDisplay,
     },
     data()
@@ -106,7 +110,6 @@ export default
             // index iteration of the taskData array within the first level object.
             this.cloneTaskTemplate.taskData.forEach((object, index) => 
             {
-                // console.log(object)
                 // key iteration of the deep level object in the clone taskData array.
                 for(let key in object)
                 {
@@ -116,15 +119,16 @@ export default
                     } 
                 }
             });
-
-            console.log(this.cloneTaskTemplate)
         },
         /**
          * Parent: <button> | Trigger Type: onClick - pushes the cloned template into cloned task list.
          */
         addTask()
         {
-            this.localTaskList.push(this.cloneTaskTemplate)
+            // create locale copy to prevent pushing data referenced to the clone. will cause mutation if original clone is pushed.
+            const streamData = structuredClone(this.cloneTaskTemplate);
+
+            this.localTaskList.push(streamData)
             this.newTaskAlertFlag = true
             this.$refs.taskForm.reset()
         }
@@ -132,6 +136,36 @@ export default
 }
 </script>
 <style scope>
+/* tags */
+textarea 
+{
+    font-family: helvetica, sans-serif;
+    resize: none;
+}
+button
+{
+    font-family: helvetica, sans-serif;
+    
+    margin: 10px;
+    padding: 10px;
+
+    color: #454138;
+    background-color: #d1cdb7;
+
+    border-width: 2px;
+    border-radius: 3px;
+    border-style: outset;
+    border-color: #454138;
+
+    transition: all 0.3s ease;
+}
+button:hover
+{
+    cursor: pointer;
+    color: #d1cdb7;
+    background-color: #454138;
+}
+/* common */
 .parent-margin
 {
     margin-left: 25%;
@@ -159,10 +193,10 @@ export default
 }
 .std-border
 {
-    border-width: 2px;
+    border-width: 2px 2px 2px 2px;
     border-radius: 3px;
     border-style: solid;
-    border-color: black;
+    border-color: #454138;
 }
 /* add alert */
 .green-alert

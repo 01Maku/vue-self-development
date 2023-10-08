@@ -1,25 +1,31 @@
 <template lang="en">
-    <div :class="taskDesignObject.class">
+    <div>
+        <div :class="taskDesignObject.classPriority + ' padding margin indication-block'">
+        </div>
+        <div :class="taskDesignObject.classState + ' padding margin indication-block'">
+        </div>
         <div>
             <h3>{{ taskDesignObject.title }}</h3>
         </div>
         <div class="flex row justify-center">
             <button class="margin padding" @click="toggleDetail">Details</button>
-            <button class="margin padding" @click="">Mark as Complete</button>
+            <button class="margin padding" @click="markComplete">Mark as Complete</button>
         </div>
         <div v-if="displayFlag" class="margin padding flex row" v-for="data in taskDataObject" :key="data">
-            <div class="margin padding flex row std-border basis label">
+            <div class="margin padding flex row task-detail-border basis label">
                 <label>{{ data.label }}</label>
             </div>
-            <div class="margin padding flex row std-border basis value">
+            <div class="margin padding flex row task-detail-border basis value">
                 <label>{{ data.value }}</label>
             </div>
         </div>
     </div>
 </template>
 <script>
+import {TaskList} from '@/components/task-manager/assets/recipe/TaskManagerRecipe.js'
 export default
 {
+    name: 'TaskListDisplay',
     props:
     {
         taskDataObject:
@@ -31,24 +37,65 @@ export default
         {
             type: Object,
             required: true
+        },
+        taskIndex:
+        {
+            type: Number,
+            required: true,
         }
     },
     data()
     {
         return{
+            localTaskList: TaskList,
             displayFlag: false,
         }
     },
     methods:
     {
+        /**
+         * Parent: <button> | Trigger type: onClick - toggles the flag for showing task details.
+         */
         toggleDetail()
         {
             this.displayFlag = !this.displayFlag
+        },
+        /**
+         * Parent: <button> | Trigger type: onClick - updates the state of the task.
+         */
+        markComplete()
+        {
+            this.localTaskList[this.taskIndex].classState = 'complete'
         }
     }
 }
 </script>
 <style scoped>
+/* tags */
+button
+{
+    font-family: helvetica, sans-serif;
+    
+    margin: 10px;
+    padding: 10px;
+
+    color: #454138;
+    background-color: #d1cdb7;
+
+    border-width: 2px;
+    border-radius: 3px;
+    border-style: outset;
+    border-color: #454138;
+
+    transition: all 0.3s ease;
+}
+button:hover
+{
+    cursor: pointer;
+    color: #d1cdb7;
+    background-color: #454138;
+}
+/* common */
 .parent-margin
 {
     margin-left: 25%;
@@ -82,12 +129,24 @@ export default
 {
     justify-content: center;
 }
-.std-border
+.task-detail-border
 {
-    border-width: 2px;
+    background-color: #45413848;
+
+    border-width: 0px 2px 2px 0px;
     border-radius: 3px;
     border-style: solid;
-    border-color: black;
+    border-color: #454138;
+}
+.indication-block
+{
+    padding: 5px;
+    margin: 0px;
+
+    border-width: 0px 2px 2px 2px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.5);
 }
 /* specific container design */
 .label 
@@ -95,20 +154,24 @@ export default
   flex: 0 0 25%;
 }
 .value
- {
+{
   flex: 1; 
 }
 /* task state indications */
 .complete
 {
-    background-color: #eaf5c7;
+    background-color: #4aff42;
+}
+.pending
+{
+    background-color: #fbff8f;
 }
 .priority
 {
-    background-color: #f8e1de;
+    background-color: #ff9694;
 }
 .non-priority
 {
-    background-color: #93ccea;
+    background-color: #a4a3ff;
 }
 </style>

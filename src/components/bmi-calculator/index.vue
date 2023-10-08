@@ -1,4 +1,5 @@
 <template lang="en">
+    <nav-bar></nav-bar>
     <div class="parent-margin padding flex column std-border">
         <div class="margin padding std-border">
             <h1>BMI Calculator</h1>
@@ -25,6 +26,7 @@
 </template>
 <script>
 // pages
+import NavBar from '@/components/home/NavBar.vue'
 import inputComponents from '@/components/bmi-calculator/assets/pages/input-components.vue'
 // recipe
 import {inputTemplate, nullModel, dataCluster, bmiValidator} from '@/components/bmi-calculator/assets/recipe/bmi-recipe.js'
@@ -36,6 +38,7 @@ export default
     },
     components:
     {
+        NavBar,
         inputComponents,
     },
     data()
