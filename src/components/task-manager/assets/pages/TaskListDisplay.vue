@@ -51,6 +51,27 @@ export default
             displayFlag: false,
         }
     },
+    computed:
+    {
+        cloneSortedTaskList()
+        {
+            const truePriorityObjects = [];
+            const falsePriorityObjects = [];
+
+            for (let i = 0; i < this.localTaskList.length; i++) 
+            {
+                if (this.localTaskList[i].taskData[1].value) 
+                {
+                    truePriorityObjects.push(this.localTaskList[i]);
+                } else 
+                {
+                    falsePriorityObjects.push(this.localTaskList[i]);
+                }
+            }
+
+            return truePriorityObjects.concat(falsePriorityObjects);
+        },
+    },
     methods:
     {
         /**
@@ -65,7 +86,8 @@ export default
          */
         markComplete()
         {
-            this.localTaskList[this.taskIndex].classState = 'complete'
+            console.log(this.taskIndex)
+            this.cloneSortedTaskList[this.taskIndex].classState = 'complete'
         }
     }
 }
