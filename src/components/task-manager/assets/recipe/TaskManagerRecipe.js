@@ -118,6 +118,7 @@ const NullModel =
     inputPriority: '',
     inputDescription: '',
 }
+
 export
 {
     TaskList,

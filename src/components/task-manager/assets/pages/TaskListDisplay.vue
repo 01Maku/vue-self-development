@@ -10,6 +10,7 @@
         <div class="flex row justify-center">
             <button class="margin padding" @click="toggleDetail">Details</button>
             <button class="margin padding" @click="markComplete">Mark as Complete</button>
+            <button class="margin padding" @click="removeTask">Remove</button>
         </div>
         <div v-if="displayFlag" class="margin padding flex row" v-for="data in taskDataObject" :key="data">
             <div class="margin padding flex row task-detail-border basis label">
@@ -55,20 +56,6 @@ export default
     {
         cloneSortedTaskList()
         {
-            const truePriorityObjects = [];
-            const falsePriorityObjects = [];
-
-            for (let i = 0; i < this.localTaskList.length; i++) 
-            {
-                if (this.localTaskList[i].taskData[1].value) 
-                {
-                    truePriorityObjects.push(this.localTaskList[i]);
-                } else 
-                {
-                    falsePriorityObjects.push(this.localTaskList[i]);
-                }
-            }
-
             return truePriorityObjects.concat(falsePriorityObjects);
         },
     },
@@ -86,8 +73,14 @@ export default
          */
         markComplete()
         {
-            console.log(this.taskIndex)
             this.cloneSortedTaskList[this.taskIndex].classState = 'complete'
+        },
+        /**
+         * Parent: <button> | Trigger type: onClick - removes selected task item.
+         */
+        removeTask()
+        {
+            this.localTaskList.splice(this.taskIndex, 1)
         }
     }
 }

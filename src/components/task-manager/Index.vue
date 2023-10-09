@@ -3,6 +3,10 @@
     <div v-if="newTaskAlertFlag" class="padding parent-margin std-border green-alert">
         <h3>New Task Added! Check your List.</h3>
     </div>
+    <b-button v-b-modal.modal-1>Modal</b-button>
+    <b-modal id="modal-1" title="BootstrapVue">
+        <p class="my-4">Hello from modal!</p>
+    </b-modal>
     <div class="parent-margin padding flex column">
         <form ref="taskForm" @submit.prevent="addTask">
             <div class="margin padding flex column std-border">
@@ -26,11 +30,24 @@
         </form>
         <div class="margin padding std-border">
             <h3>My Task Lists</h3>
-            <task-list-display class="margin padding flex column std-border" v-for="(taskObject, index) in cloneTaskList" :key="taskObject"
-                :task-data-object="taskObject.taskData"
-                :task-design-object="{title: taskObject.title, classPriority: taskObject.classPriority, classState: taskObject.classState}"
-                :task-index="index">
-            </task-list-display>
+            <div v-for="(taskObject, index) in localTaskList" :key="taskObject">
+                <div v-if="taskObject.classPriority == 'priority'">
+                    <task-list-display class="margin padding flex column std-border" 
+                        :task-data-object="taskObject.taskData"
+                        :task-design-object="{title: taskObject.title, classPriority: taskObject.classPriority, classState: taskObject.classState}"
+                        :task-index="index">
+                    </task-list-display>
+                </div>
+            </div>
+            <div v-for="(taskObject, index) in localTaskList" :key="taskObject">
+                <div v-if="taskObject.classPriority == 'non-priority'">
+                    <task-list-display class="margin padding flex column std-border" 
+                        :task-data-object="taskObject.taskData"
+                        :task-design-object="{title: taskObject.title, classPriority: taskObject.classPriority, classState: taskObject.classState}"
+                        :task-index="index">
+                    </task-list-display>    
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -64,20 +81,6 @@ export default
     {
         cloneTaskList()
         {
-            const truePriorityObjects = [];
-            const falsePriorityObjects = [];
-
-            for (let i = 0; i < this.localTaskList.length; i++) 
-            {
-                if (this.localTaskList[i].taskData[1].value) 
-                {
-                    truePriorityObjects.push(this.localTaskList[i]);
-                } else 
-                {
-                    falsePriorityObjects.push(this.localTaskList[i]);
-                }
-            }
-
             return truePriorityObjects.concat(falsePriorityObjects);
         },
         cloneTaskTemplate()
@@ -105,6 +108,14 @@ export default
                 {
                     this.cloneTaskTemplate.title = paramValue
                 }
+                else if(key == 'classPriority' && paramValue == true)
+                {
+                    this.cloneTaskTemplate.classPriority = 'priority'
+                }
+                else if(key == 'classPriority' && paramValue == false)
+                {
+                    this.cloneTaskTemplate.classPriority = 'non-priority'
+                }
             }
 
             // index iteration of the taskData array within the first level object.
@@ -130,8 +141,9 @@ export default
 
             this.localTaskList.push(streamData)
             this.newTaskAlertFlag = true
+            this.localNullModel = structuredClone(NullModel)
             this.$refs.taskForm.reset()
-        }
+        },
     }
 }
 </script>
