@@ -15,6 +15,9 @@
           <router-link to="/task-manager">
               <div class="padding margin router-links flex">Task Manager</div>
           </router-link>
+          <router-link to="/bankist">
+              <div class="padding margin router-links flex">Bank Application</div>
+          </router-link>
           <router-link to="/">
               <div class="padding margin router-links flex">Log Out</div>
           </router-link>
