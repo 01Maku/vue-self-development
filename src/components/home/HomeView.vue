@@ -1,34 +1,20 @@
 <template lang="en">
-  <div class="flex">
-      <h4>BunkeR - Server 3C3C1D119440927</h4>
-  </div>
-  <div class="flex row window">
-    <div class="padding margin flex column sub-window page-select">
-      <h2>PagE SelecT</h2>
-      <nav class="padding margin router-links-container">
-          <router-link to="/slam-boo">
-              <div @mouseenter="showPreview" @mouseleave="hidePreview" class="padding margin router-links flex">Slamboo</div>
-          </router-link>
-          <router-link to="/bmi-calculator">
-              <div class="padding margin router-links flex">BMI Calculator</div>
-          </router-link>
-          <router-link to="/task-manager">
-              <div class="padding margin router-links flex">Task Manager</div>
-          </router-link>
-          <router-link to="/bankist">
-              <div class="padding margin router-links flex">Bank Application</div>
-          </router-link>
-          <router-link to="/">
-              <div class="padding margin router-links flex">Log Out</div>
-          </router-link>
-      </nav>
+  <div class="flex parent">
+    <div class="nav-window">
+      <nav-bar></nav-bar>
     </div>
-    <div class="padding margin flex column sub-window preview">
-      <h2>PagE Preview</h2>
-      <div v-if="previewFlag">
-          <h1>PagePreview.vue</h1>
+    <div class="flex main-window">
+      <div class="flex profile-display">
+        <img src="@/components/home/assets/profile/profile-maks.jpeg">
+      </div>
+      <div class="flex description-display">
+        <p>Hi, Im Maks, I am a Web Developer! Did you know I made this web application, Pretty cool right?</p>
       </div>
     </div>
+    <div class="foot-window">
+      <h4>This is page is developed by Maks for Self Developement</h4>
+      <p>https://github.com/01Maku.</p>
+    </div>  
   </div>
 </template>
 <script>
@@ -43,123 +29,103 @@ export default
   data()
   {
     return{
-      previewFlag: false,
+      
     }
   },
-  methods:
-  {
-    showPreview()
-    {
-      this.previewFlag = true
-    },
-    hidePreview()
-    {
-      setTimeout(() => 
-      {
-        this.previewFlag = false
-      }, 1500);
-    }
-  }
 }
 </script>
 <style scoped>
 /* tags */
-a
+img
 {
-  padding: 5px;
-  text-decoration: none;
+  display: block; 
 
-  font-weight: bold;
-  color: #454138;
+  max-width: 128px;
+  min-width: 64px;
+  height: auto; 
 }
-
-/* nav links */
-.router-links
-{
-  margin: 10px;
-  flex: 1;  
-
-  background-color: #45413848;
-
-  border-width: 6px 0px 6px 0px;
-  border-radius: 2px;
-  border-style: double;
-  border-color: #454138;
-
-  transition: all 0.3s ease;
-}
-
-.router-links:hover
-{
-  background-color: #454138;
-  color: #dcd8c0;
-
-  border-width: 6px 0px 6px 0px;
-  border-radius: 2px;
-  border-style: double;
-  border-color: #dcd8c0;
-}
-
-.router-links:hover a 
-{
-  color: #dcd8c0;
-}
-
-/* reusable */
-.padding
-{
-  padding: 5px;
-}
-.margin
-{
-  margin: 5px;
-}
+/* reusables */
 .flex
 {
   display: flex;
 }
-.row
-{
-  flex-direction: row;
-}
-.column
-{
-  flex-direction: column;
-}
-/* window */
-.window
-{
-  justify-content: space-between;
-}
-.sub-window
-{
-  flex: 1;  
-}
-.page-select
-{
-  flex: 0 0 25%;
-  background-color: #dcd8c054;
-
-  border-width: 0px 2px 2px 0px;
-  border-radius: 3px;
-  border-style: solid;
-  border-color: #454138;
-}
-.preview
-{
-  flex: 1; 
-  background-color: #dcd8c054;
-
-  border-width: 0px 2px 2px 0px;
-  border-radius: 3px;
-  border-style: solid;
-  border-color: #454138;
-}
-.preview-header
+.border
 {
   border-width: 2px 2px 2px 2px;
   border-radius: 3px;
   border-style: solid;
   border-color: #454138;
+}
+/* specifics */
+.parent
+{
+  flex-direction: column;
+}
+.nav-window
+{
+  padding: 25px;
+  background-color: #171d25e8;
+}
+.main-window
+{
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  max-width: 100%;
+  min-width: auto;
+  height: auto; 
+
+  margin-top: 5px;
+  margin-left: 25%;
+  margin-right: 25%;
+
+  border-width: 2px 2px 2px 2px;
+  border-radius: 2px;
+  border-style: solid;
+  border-color: #0e1c2f;
+
+  background-color: #0d2e76c9;
+}
+.profile-display
+{
+  flex: 0 0 128px;
+
+  margin: 10px;
+
+  justify-content: center;
+  align-items: center;
+}
+.description-display
+{
+  flex: 0 0 calc(100% - 256px);
+
+  padding: 10px;
+  margin: 10px;
+
+  text-align: left;
+
+  color: #ffffff;
+}
+.foot-window
+{
+  padding: 10px;
+  margin-top: 5px;
+  margin-left: 25%;
+  margin-right: 25%;
+  margin-bottom: 5px;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+
+  border-width: 2px 2px 2px 2px;
+  border-radius: 2px;
+  border-style: solid;
+  border-color: #0e1c2f;
+
+  background-color: #0d2e76c9;
+
+  color: #ffffff;
 }
 </style>

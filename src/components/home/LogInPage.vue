@@ -1,20 +1,19 @@
 <template lang="en">
-    <div class="padding margin flex column">
-        <div class="padding margin flex column">
-            <h1>YorhA OrbitaL BunkeR</h1>
+    <div class="flex super-container">
+        <div class="flex log-in-card border">
+            <h1>あなたの名前とパスワードを教えてください</h1>
+            <form ref="inputForm" @submit.prevent="validateUser">
+                <input required v-model.trim="nullModelDesignation" type="text" placeholder="username">
+                <input required v-model.trim="nullModelIdentifier" type="password" placeholder="password">
+                <button>ログイン</button>
+            </form>
         </div>
-        <form ref="inputForm" @submit.prevent="validateUnit">
-            <div class="padding margin flex column">
-                <input required v-model="nullModelDesignation" type="text" placeholder="YorhA Designation">
-                <input required v-model="nullModelIdentifier" type="password" placeholder="YorhA Identifier">
-            </div>
-            <button>SenD RequesT</button>
-         </form>
     </div>
 </template>
 <script>
 export default
 {
+
     data()
     {
         return{
@@ -24,89 +23,65 @@ export default
     },
     methods:
     {
-        validateUnit()
+        validateUser()
         {
-            if(this.nullModelDesignation == 'scout-unit-9' && this.nullModelIdentifier == 'scout-unit-9')
+            if(this.nullModelDesignation == 'Maks' && this.nullModelIdentifier == 'Maks')
             {
-                this.$refs.inputForm.reset()
+                alert('Access Granted')
                 this.$router.push('/home')
-                alert('AccesS GranteD foR uniT 9 - ModeL - ScouT')
             }
             else
             {
-                alert('AccesS DenieD')
+                alert('Access Denied')
             }
         }
     }
 }
 </script>
 <style scoped>
-.parent-margin
+/* tags */
+form
 {
-    margin-left: 25%;
-    margin-right: 25%;
+    display: flex;
+    flex-direction: column;
 }
-.margin
-{
-    margin: 10px;
-}
-.padding
+input[type="text"], input[type="password"]
 {
     padding: 10px;
+    margin: 10px;
+    text-align: center;
 }
+/* reusables */
 .flex
 {
     display: flex;
 }
-.column
+/* specifics */
+.super-container
 {
+    margin: 0;
+    padding: 0;
+
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.log-in-card
+{
+    margin: 10px;
+    padding: 20px;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: #dbd7d4;
+    background-color: #795662a2;
 }
-.row
+.border
 {
-    flex-direction: row;
-}
-.std-border
-{
-    border-width: 2px;
-    border-radius: 3px;
+    border-width: 3px 3px 3px 3px;
+    border-radius: 5px;
     border-style: solid;
-    border-color: #454138;
-}
-
-input[type="text"], input[type="password"]
-{
-    margin: 10px;
-    padding: 10px;
-
-    border-width: 2px;
-    border-radius: 3px;
-    border-style: outset;
-    border-color: #454138;
-}
-
-button
-{
-    font-family: helvetica, sans-serif;
-    
-    margin: 10px;
-    padding: 10px;
-
-    color: #454138;
-    background-color: #d1cdb7;
-
-    border-width: 2px;
-    border-radius: 3px;
-    border-style: outset;
-    border-color: #454138;
-
-    transition: all 0.3s ease;
-}
-
-button:hover
-{
-    cursor: pointer;
-    color: #d1cdb7;
-    background-color: #454138;
+    border-color: #9e916d;
 }
 </style>

@@ -86,23 +86,86 @@
     </div>
     <!-- LOGOUT TIMER -->
     <p class="logout-timer">
-        You will be logged out in <span class="timer">05:00</span>
+      <button @click="startCountdown">Start Timer</button>
+      <button @click="stopTimer">Stop Timer</button>
+        You will be logged out in <span class="timer">{{formattedTime}}</span>
     </p>
 </main>
 </template>
 <script>
 export default
 {
-    data()
+  data()
+  {
+      return{
+          imageSource: require('@/components/bankist/assets/img/logo.png'),
+          minutes: 5,
+          seconds: 0,
+          countdownActive: false,
+          timerInterval: null,
+      }
+  },
+  watch: 
+  {
+    countdownActive: 
     {
-        return{
-            imageSource: require('@/components/bankist/assets/img/logo.png'),
+      immediate: true,
+      handler(newValue) 
+      {
+        if (newValue) 
+        {
+          this.startTimer();
+        } 
+        else 
+        {
+          this.stopTimer();
         }
-    },
-    methods:
-    {
-        
+      }
     }
+  },
+  computed:
+  {
+    formattedTime() 
+    {
+      const formattedMinutes = this.minutes < 10 ? '0' + this.minutes : this.minutes;
+      const formattedSeconds = this.seconds < 10 ? '0' + this.seconds : this.seconds;
+      return `${formattedMinutes}:${formattedSeconds}`;
+    },
+  },
+  methods: 
+  {
+    startTimer() 
+    {
+      this.timerInterval = setInterval(() => 
+      {
+        if (this.seconds === 0) 
+        {
+          if (this.minutes === 0) 
+          {
+            this.countdownActive = false;
+            return;
+          }
+          this.minutes--;
+          this.seconds = 59;
+        } 
+        else 
+        {
+          this.seconds--;
+        }
+      }, 1000);
+    },
+    startCountdown() 
+    {
+      this.countdownActive = true;
+    },
+    stopTimer()
+    {
+      this.countdownActive = false;
+      this.minutes = 5
+      this.seconds = 0
+      clearInterval(this.timerInterval);
+    }
+  }
 }
 </script>
 <style scoped>
@@ -194,11 +257,6 @@ nav {
   grid-template-columns: 4fr 3fr;
   grid-template-rows: auto repeat(3, 15rem) auto;
   gap: 2rem;
-
-  /* NOTE This creates the fade in/out anumation */
-  opacity: 0;
-  visibility: hidden;
-  transition: all 1s;
 }
 
 .balance {

@@ -143,7 +143,7 @@ export default
     border-radius: 3px;
     border-width: 2px;
     border-style: solid;
-    border-color: black;
+    border-color: #ffffff;
 }
 /* text formatter */
 </style>
