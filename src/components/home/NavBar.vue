@@ -1,26 +1,46 @@
 <template lang="en">
+  <audio id="buttonClickSFX" preload="auto">
+    <source src="@/components/home/assets/sfx/nier-sfx-5.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+  </audio>
   <nav>
-      <router-link to="/home" class="router-links">
-        <div>Home</div>
-      </router-link>
-      <router-link to="/slam-boo" class="router-links">
-          <div>Slamboo</div>
-      </router-link>
-      <router-link to="/bmi-calculator" class="router-links">
-          <div>BMI Calculator</div>
-      </router-link>
-      <router-link to="/task-manager" class="router-links">
-          <div>Task Manager</div>
-      </router-link>
+      <a @click="playSfx('/home')" class="router-links">
+        <div @click="playSfx('/home')">Home</div>
+      </a>
+      <a @click="playSfx('/slam-boo')" class="router-links">
+          <div @click="playSfx('/slam-boo')">Slamboo</div>
+      </a>
+      <a @click="playSfx('/bmi-calculator')" class="router-links">
+          <div @click="playSfx('/bmi-calculator')">BMI Calculator</div>
+      </a>
+      <a @click="playSfx('/task-manager')" class="router-links">
+          <div @click="playSfx('/task-manager')">Task Manager</div>
+      </a>
       <router-link to="/" class="router-links">
         <div>Leave</div>
       </router-link>
   </nav>
 </template>
+<script>
+export default
+{
+  methods:
+  {
+    playSfx(paramLink)
+    {
+      const audio = document.getElementById('buttonClickSFX');
+      audio.currentTime = 0;
+      audio.play();
+      this.$router.push(paramLink);
+    }
+  }
+}
+</script>
 <style scoped>
 /* tags */
 a
 {
+  cursor: pointer;
   text-decoration: none;
   color: #ffffff;
 }

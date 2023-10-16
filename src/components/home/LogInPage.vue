@@ -7,6 +7,14 @@
                 <input required v-model.trim="nullModelIdentifier" type="password" placeholder="password">
                 <button>ログイン</button>
             </form>
+            <audio id="log-success" preload="auto">
+            <source src="@/components/home/assets/sfx/nier-sfx-8.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <audio id="log-denied" preload="auto">
+            <source src="@/components/home/assets/sfx/nier-sfx-5.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
         </div>
     </div>
 </template>
@@ -25,13 +33,19 @@ export default
     {
         validateUser()
         {
+            const logSuccess = document.getElementById('log-success');
+            const logDenied = document.getElementById('log-denied');
+            logSuccess.currentTime = 0;
+            logDenied.currentTime = 0;
             if(this.nullModelDesignation == 'Maks' && this.nullModelIdentifier == 'Maks')
             {
+                logSuccess.play();
                 alert('Access Granted')
                 this.$router.push('/home')
             }
             else
             {
+                logDenied.play();
                 alert('Access Denied')
             }
         }
