@@ -1,7 +1,7 @@
 <template lang="en">
   <div class="flex parent">
     <div class="nav-window">
-      <nav-bar></nav-bar>
+      <nav-bar @emittedData="handlePreview"></nav-bar>
     </div>
     <div class="flex main-window">
       <div class="flex profile-display">
@@ -11,27 +11,39 @@
         <p>Hi, Im Maks, I am a Web Developer! Did you know I made this web application, Pretty cool right?</p>
       </div>
     </div>
+    <div class="preview-display">
+      
+    </div>
     <div class="foot-window">
-      <h4>This is page is developed by Maks for Self Developement</h4>
-      <p>https://github.com/01Maku.</p>
+      <h4>This is page is developed by Maks</h4>
     </div>  
   </div>
 </template>
 <script>
 import NavBar from '@/components/home/NavBar.vue'
+import SlamBoo from '@/components/slamboo/slam-boo.vue'
 export default
 {
   name: 'HomeView',
   components:
   {
     NavBar,
+    SlamBoo
   },
   data()
   {
     return{
-      
+      componentName: null
     }
   },
+  methods:
+  {
+    handlePreview(paramObject)
+    {
+      console.log(paramObject)
+      this.componentName = paramObject
+    }
+  }
 }
 </script>
 <style scoped>

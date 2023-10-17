@@ -1,13 +1,37 @@
 <template lang="en">
   <div class="video-container ">
     <video autoplay loop muted>
-      <source :src="require('@/components/home/assets/bg/steam-getsu-clan.webm')" type="video/webm">
+      <source :src="require('@/components/home/assets/bg/grassland-night-camp-rev2.mp4')" type="video/mp4">
     </video>
   </div>
   <div class="content">
     <router-view></router-view>
   </div>
 </template>
+<script>
+export default
+{
+  methods:
+  {
+    emitterFunction(param1, param2)
+    {
+      const emittedObject =
+      {
+        param1: param1,
+        param2: param2,
+      }
+
+      this.$emit('emittedData', emittedObject)
+    }
+  },
+  provide() 
+  {
+    return {
+      emitterFunction: this.emitterFunction,
+    }
+  },
+}
+</script>
 <style scoped>
 video 
 {
