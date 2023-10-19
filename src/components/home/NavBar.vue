@@ -16,6 +16,9 @@
       <a @click="playSfx('/task-manager')" @mouseenter="emitPreview('/task-manager')" class="router-links">
           <div @click="playSfx('/task-manager')" @mouseenter="emitPreview('/task-manager')">Task Manager</div>
       </a>
+      <a @click="playSfx('/mapty')" @mouseenter="emitPreview('/mapty')" class="router-links">
+          <div @click="playSfx('/mapty')" @mouseenter="emitPreview('/mapty')">Mapty</div>
+      </a>
       <router-link to="/" class="router-links">
         <div>Leave</div>
       </router-link>

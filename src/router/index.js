@@ -5,6 +5,7 @@ import slamBoo from '@/components/slamboo/slam-boo.vue'
 import bmiCalculator from '@/components/bmi-calculator/index.vue'
 import taskManager from '@/components/task-manager/Index.vue'
 import Bankist from '@/components/bankist/Index.vue'
+import Mapty from '@/components/mapty/Index.vue'
 
 const routes = 
 [
@@ -41,6 +42,11 @@ const routes =
     path: '/bankist',
     name: 'Bankist',
     component: Bankist
+  },
+  {
+    path: '/mapty',
+    name: 'Mapty',
+    component: Mapty
   }
 ]
 
