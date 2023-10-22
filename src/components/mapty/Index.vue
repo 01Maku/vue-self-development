@@ -3,38 +3,41 @@
     <div class="super-container">
         <div class="sidebar">
             <img src="@/components/mapty/logo.jpeg" alt="Logo" class="logo" />
-            <ul class="workouts">
-                <form class="form">
+            <div class="workouts">
+                <form class="form" @submit.prevent="pushData">
+                  <label class="form__label">{{latitude}}</label>
+                  <label class="form__label">{{longitude}}</label>
                     <div class="form__row">
                         <label class="form__label">Type</label>
-                        <select class="form__input form__input--type">
-                            <option value="running">Running</option>
-                            <option value="cycling">Cycling</option>
+                        <select v-model="actionFlag" required class="form__input form__input--type" @change="saveData($event.target.value, 'Type')">
+                            <option value="" disabled selected>Select an activity</option>
+                            <option value="Running">Running</option>
+                            <option value="Cycling">Cycling</option>
                         </select>
                     </div>
                     <div class="form__row">
                         <label class="form__label">Distance</label>
-                        <input class="form__input form__input--distance" placeholder="km" />
+                        <input required class="form__input form__input--distance" type="number" placeholder="km" @change="saveData(`${$event.target.value} KM`, 'Distance')"/>
                     </div>
                     <div class="form__row">
                         <label class="form__label">Duration</label>
-                        <input class="form__input form__input--duration" placeholder="min"/>
+                        <input required class="form__input form__input--duration" type="number" placeholder="min" @change="saveData(`${$event.target.value} MIN`, 'Duration')"/>
                     </div>
                     <div class="form__row">
                         <label class="form__label">Cadence</label>
-                        <input class="form__input form__input--cadence" placeholder="step/min"/>
-                    </div>
-                    <div class="form__row">
-                        <label class="form__label">Elev Gain</label>
-                        <input class="form__input form__input--elevation" placeholder="meters"/>
+                        <input required class="form__input form__input--cadence" type="number" placeholder="step/min" @change="saveData(`${$event.target.value} KM/MIN`, 'Progress')"/>
                     </div>
                     <button class="form__btn">OK</button>
                 </form>
-            </ul>
-            <p class="copyright">&copy;Copyright by
-                <a class="twitter-link" target="_blank" href="https://twitter.com/jonasschmedtman">Jonas Schmedtmann</a>
-                . Use for learning or your portfolio. Don't use to teach. Don't claim as your own.
-            </p>
+                <div v-for="(workouts, index) in markerDataList" :key="workouts" class="workout-items">
+                  <label>{{workouts.data.Type}}</label>
+                  <label>{{workouts.data.Distance}}</label>
+                  <label>{{workouts.data.Duration}}</label>
+                  <label>{{workouts.data.Progress}}</label>
+                  <button @click="deleteWorkout(index)">Delete</button>
+                </div>
+                <button @click="clearMarkers">Clear All</button>
+            </div>
         </div>
         <div id="map">
         </div>
@@ -44,6 +47,7 @@
 import NavigationBar from '@/components/home/NavBar.vue'
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import {importMarkerDataList, workoutDataTemplate} from '@/components/mapty/assets/workoutData.js'
 export default
 {
     name: 'Index',
@@ -54,9 +58,18 @@ export default
     data() 
     {
         return {
+            // recipe
+            markerDataList: importMarkerDataList,
+            cloneWorkoutDataTemplate: structuredClone(workoutDataTemplate),
+            // map
             map: null,
+            latitude: null,
+            longitude: null,
+            currentMarker: null,
             mapZoomLevel: 13, 
-            workouts: [],
+            workout: [],
+            // flag
+            actionFlag: null,
         };
     },
     beforeMount()
@@ -65,77 +78,205 @@ export default
     },
     methods:
     {
-        getPosition() 
-        {
-            if (navigator.geolocation) 
+      getPosition() 
+      {
+          if (navigator.geolocation) 
+          {
+              navigator.geolocation.getCurrentPosition
+              (
+                  (position) => this.loadMap(position),() => 
+                  {
+                      alert('Could not get your position');
+                  }
+              );
+          }
+      },
+      loadMap(position) 
+      {
+          if (this.map === null) 
+          {
+              const latitude = position.coords.latitude; 
+              const longitude = position.coords.longitude;
+              const coords = [latitude, longitude];
+
+              this.map = L.map('map').setView(coords, this.mapZoomLevel);
+
+              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
+              {
+                  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+              }).addTo(this.map);
+
+              this.map.on('click', this.onMapClick);
+          }
+      },
+      onMapClick(event) 
+      {
+          if(this.actionFlag)
+          {
+            this.latitude =  event.latlng.lat;
+            this.longitude =  event.latlng.lng;
+
+            this.cloneWorkoutDataTemplate.Latitude = this.latitude
+            this.cloneWorkoutDataTemplate.Longitude = this.longitude
+
+            if(this.currentMarker) 
             {
-                navigator.geolocation.getCurrentPosition
-                (
-                    (position) => this.loadMap(position),() => 
-                    {
-                        alert('Could not get your position');
-                    }
-                );
+              this.map.removeLayer(this.currentMarker);
             }
-        },
-        loadMap(position) 
-        {
-            if (this.map === null) 
+
+            let customIcon
+            
+            // using html and img src
+            if(this.actionFlag == 'Cycling')
             {
-                const latitude = position.coords.latitude; 
-                const longitude = position.coords.longitude;
-
-                const coords = [latitude, longitude];
-
-                this.map = L.map('map').setView(coords, this.mapZoomLevel);
-
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
-                {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                }).addTo(this.map);
-
-                this.map.on('click', this.onMapClick);
-
-                this.workouts.forEach((work) => 
-                {
-                    this._renderWorkout(work);
-                    this._renderWorkoutMarker(work);
-                });
-            }
-        },
-        onMapClick(event) 
-        {
-            const latlng = event.latlng;
-            const latitude = latlng.lat;
-            const longitude = latlng.lng;
-
-            console.log('Latitude: ' + latitude);
-            console.log('Longitude: ' + longitude);
-
-            this.addMarker(latlng);
-        },
-        addMarker(latlng) 
-        {
-            L.marker(latlng).addTo(this.map);
-        },
-        createCustomMarker() 
-        {
-            // Create a custom marker icon
-            const customIcon = L.divIcon
-            ({
+              customIcon = L.divIcon
+              ({
                 className: 'custom-marker-icon',
-                html: '<div class="custom-marker-content">Your HTML content here</div>',
-            });
+                html: `
+                  <div class="custom-marker-container">
+                    <img src="${require('@/components/mapty/assets/cycling-2.gif')}" alt="Icon" class="marker-gif">
+                    <div class="marker-label">Cycling</div>
+                  </div>
+                `,
+                iconSize: [32, 32],
+                iconAnchor: [32, 72], 
+              });
+            }
 
-            // Add a marker with the custom HTML icon
-            const marker = L.marker([51.505, -0.09],
+            // using html and img src
+            if(this.actionFlag == 'Running')
             {
-                icon: customIcon,
+              customIcon = L.divIcon
+              ({
+                className: 'custom-marker-icon',
+                html: `
+                  <div class="custom-marker-container">
+                    <img src="${require('@/components/mapty/assets/running-2.gif')}" alt="Icon" class="marker-gif">
+                    <div class="marker-label">Running</div>
+                  </div>
+                `,
+                iconSize: [32, 32],
+                iconAnchor: [32, 72], 
+              });
+            }
+          
+            this.currentMarker = L.marker([this.latitude, this.longitude], 
+            {
+              icon: customIcon,
             }).addTo(this.map);
-        },
+          }
+          else
+          {
+            alert('Pick an Action first')
+          }
+      },
+      saveData(paramValue, paramModel)
+      {
+        for(const key in this.cloneWorkoutDataTemplate)
+        {
+          if(key == paramModel)
+          {
+            this.cloneWorkoutDataTemplate[key] = paramValue
+          }
+        }
+      },
+      pushData()
+      {
+        if(this.latitude && this.longitude)
+        {
+          const customIcon = L.divIcon({
+            className: 'custom-marker-icon',
+            html: `
+              <div class="custom-marker-container">
+                <img src="${require('@/components/mapty/assets/running-2.gif')}" alt="Icon" class="marker-gif">
+                <div class="marker-label">Running</div>
+              </div>
+            `,
+            iconSize: [32, 32],
+            iconAnchor: [32, 72],
+          });
+
+          const marker = L.marker([this.latitude, this.longitude], 
+          {
+            icon: customIcon,
+          }).addTo(this.map);
+
+              // Store the marker reference along with data
+          const markerData = 
+          {
+            data: structuredClone(this.cloneWorkoutDataTemplate),
+            marker: marker,  // Store the marker reference
+          };
+
+          this.markerDataList.push(markerData);
+          this.cloneWorkoutDataTemplate = structuredClone(workoutDataTemplate)
+        }
+        else
+        {
+          alert('Pick a Location First')
+        }
+      },
+      deleteWorkout(paramIndex)
+      {
+        const markerData = this.markerDataList[paramIndex];
+        this.map.removeLayer(markerData.marker);
+        this.markerDataList.splice(paramIndex, 1);
+      },
+      clearMarkers() 
+      {
+        this.markerDataList.forEach((markerData) => {
+          this.map.removeLayer(markerData.marker);
+        });
+        this.markerDataList.splice(0, this.markerDataList.length)
+      },
     }
 }
 </script>
+<style>
+/* custom marker container */
+.custom-marker-container 
+{
+  position: relative;
+  width: 64px;
+  height: 64px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border-width: 2px 2px 2px 2px;
+  border-radius: 3px;
+  border-style: solid;
+  border-color: #0e1c2f;
+
+  background-color: #0d2e76c9;
+}
+.custom-marker-container::before
+{
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 0;
+  height: 0;
+  
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #0d2e76c9;
+}
+.marker-gif
+{
+  width: 32px;
+  height: 32px;
+}
+.marker-label
+{
+  color:#ffffff
+}
+</style>
 <style scoped>
 /* super-container */
 .super-container 
@@ -143,7 +284,7 @@ export default
   font-family: 'Manrope', sans-serif;
   color: var(--color-light--2);
   line-height: 1.6;
-  height: 100vh;
+  height: 85vh;
   overscroll-behavior-y: none;
   padding: 2.5rem;
 
@@ -154,9 +295,19 @@ export default
 #map 
 {
   flex: 1;
-  height: 100vh;
+  height: 100%;
+  opacity: 85%;
 }
 /* SIDEBAR */
+.workout-items
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  color: #ffffff;
+}
 .sidebar {
   flex-basis: 30%;
   background-color: var(--color-dark--1);
@@ -287,10 +438,6 @@ a:visited {
   background-color: #fff;
 }
 
-.form__btn {
-  display: none;
-}
-
 .copyright {
   margin-top: auto;
   text-align: center;
@@ -330,5 +477,4 @@ a:visited {
 .cycling-popup .leaflet-popup-content-wrapper {
   border-left: 5px solid var(--color-brand--1);
 }
-
 </style>
