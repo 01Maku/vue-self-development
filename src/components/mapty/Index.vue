@@ -1,47 +1,55 @@
 <template lang="en">
-    <navigation-bar></navigation-bar>
-    <div class="super-container">
-        <div class="sidebar">
-            <img src="@/components/mapty/logo.jpeg" alt="Logo" class="logo" />
-            <div class="workouts">
-                <form class="form" @submit.prevent="pushData">
-                  <label class="form__label">{{latitude}}</label>
-                  <label class="form__label">{{longitude}}</label>
-                    <div class="form__row">
-                        <label class="form__label">Type</label>
-                        <select v-model="actionFlag" required class="form__input form__input--type" @change="saveData($event.target.value, 'Type')">
-                            <option value="" disabled selected>Select an activity</option>
-                            <option value="Running">Running</option>
-                            <option value="Cycling">Cycling</option>
-                        </select>
-                    </div>
-                    <div class="form__row">
-                        <label class="form__label">Distance</label>
-                        <input required class="form__input form__input--distance" type="number" placeholder="km" @change="saveData(`${$event.target.value} KM`, 'Distance')"/>
-                    </div>
-                    <div class="form__row">
-                        <label class="form__label">Duration</label>
-                        <input required class="form__input form__input--duration" type="number" placeholder="min" @change="saveData(`${$event.target.value} MIN`, 'Duration')"/>
-                    </div>
-                    <div class="form__row">
-                        <label class="form__label">Cadence</label>
-                        <input required class="form__input form__input--cadence" type="number" placeholder="step/min" @change="saveData(`${$event.target.value} KM/MIN`, 'Progress')"/>
-                    </div>
-                    <button class="form__btn">OK</button>
-                </form>
-                <div v-for="(workouts, index) in markerDataList" :key="workouts" class="workout-items">
-                  <label>{{workouts.data.Type}}</label>
-                  <label>{{workouts.data.Distance}}</label>
-                  <label>{{workouts.data.Duration}}</label>
-                  <label>{{workouts.data.Progress}}</label>
-                  <button @click="deleteWorkout(index)">Delete</button>
-                </div>
-                <button @click="clearMarkers">Clear All</button>
-            </div>
+  <navigation-bar></navigation-bar>
+  <div class="super-container">
+    <div class="sidebar">
+
+      <!-- n1 -->
+      <img src="@/components/mapty/logo.jpeg" alt="Logo" class="logo" />
+
+      <!-- n2 -->
+      <div class="form">
+        <form @submit.prevent="pushData">
+          <label class="form__label">{{latitude}}</label>
+          <label class="form__label">{{longitude}}</label>
+          <div class="form__row">
+            <label class="form__label">Type</label>
+            <select v-model="actionFlag" required class="form__input form__input--type" @change="saveData($event.target.value, 'Type')">
+              <option value="" disabled selected>Select an activity</option>
+              <option value="Running">Running</option>
+              <option value="Cycling">Cycling</option>
+            </select>
+          </div>
+          <div class="form__row">
+            <label class="form__label">Distance</label>
+            <input required class="form__input form__input--distance" type="number" placeholder="km" @change="saveData(`${$event.target.value} KM`, 'Distance')"/>
+          </div>
+          <div class="form__row">
+            <label class="form__label">Duration</label>
+            <input required class="form__input form__input--duration" type="number" placeholder="min" @change="saveData(`${$event.target.value} MIN`, 'Duration')"/>
+          </div>
+          <div class="form__row">
+            <label class="form__label">Cadence</label>
+            <input required class="form__input form__input--cadence" type="number" placeholder="step/min" @change="saveData(`${$event.target.value} KM/MIN`, 'Progress')"/>
+          </div>
+          <button class="form__btn">OK</button>
+        </form>
+      </div>
+  
+      <!-- n3 -->
+      <div class="workouts">
+        <button @click="clearMarkers">Clear All</button>
+        <div v-for="(workouts, index) in markerDataList" :key="workouts" class="workout-items">
+          <label>{{workouts.data.Type}}</label>
+          <label>{{workouts.data.Distance}}</label>
+          <label>{{workouts.data.Duration}}</label>
+          <label>{{workouts.data.Progress}}</label>
+          <button @click="deleteWorkout(index)">Delete</button>
         </div>
-        <div id="map">
-        </div>
+      </div>
     </div>
+    <div id="map">
+    </div>
+  </div>
 </template>
 <script>
 import NavigationBar from '@/components/home/NavBar.vue'
@@ -278,15 +286,87 @@ export default
 }
 </style>
 <style scoped>
+/* ============================================================================================================================== */
+/* sidebar */
+.sidebar 
+{
+  position: fixed;
+  top: 8%; /* You can adjust this top position */
+  bottom: 8%; /* You can adjust this bottom position */
+  left: 75%;
+  right: 1%;
+
+  padding: 10px;
+
+  min-height: 100px; /* Adjust the minimum height as needed */
+
+  display: flex;
+  flex-direction: column;
+  flex-basis: 30%; /* Adjust the width as needed */
+
+  overflow-y: auto; /* Enable vertical scrolling when content overflows */
+  overflow-x: hidden; /* Enable vertical scrolling when content overflows */
+
+  background-color: #0d2e76c9;
+
+  z-index: 1;
+}
+
+.logo 
+{
+  height: 5.2rem;
+  align-self: center;
+  margin-bottom: 2rem; /* Adjust the margin as needed */
+}
+
+.workouts 
+{
+  display: flex;
+  flex-direction: column;
+
+  min-height: 200px;
+  max-height: 400px; /* Set a maximum height, adjust as needed */
+  overflow-y: auto; /* Enable vertical scrolling when content overflows */
+  padding: 1rem; /* Add padding for better spacing */
+
+  background-color: #0d2e76c9;
+}
+
+.workout-items 
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #ffffff;
+  margin-top: 1rem; /* Add margin to separate items */
+}
+
+/* Add more specific styles for form elements as needed */
+.form 
+{
+  color: #ffffff;
+  padding: 1rem;
+}
+
+.form__input 
+{
+  width: 100%;
+  padding: 0.3rem 1.1rem;
+  border: none;
+  border-radius: 3px;
+  background-color: var(--color-light--3);
+  transition: all 0.2s;
+}
+
+.form__input:focus {
+  outline: none;
+  background-color: #ffffff;
+}
+/* ============================================================================================================================== */
 /* super-container */
 .super-container 
 {
-  font-family: 'Manrope', sans-serif;
-  color: var(--color-light--2);
-  line-height: 1.6;
-  height: 85vh;
-  overscroll-behavior-y: none;
-  padding: 2.5rem;
+  height: 92vh;
 
   display: flex;
   color: #ffffff;
@@ -298,183 +378,32 @@ export default
   height: 100%;
   opacity: 85%;
 }
-/* SIDEBAR */
-.workout-items
+/* ============================================================================================================================== */
+/* Add a media query for a specific screen width */
+@media (max-width: 800px) 
 {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  .sidebar 
+  {
+    position: fixed;
+    top: 60%; /* You can adjust this top position */
+    bottom: 0%; /* You can adjust this bottom position */
+    left: 0%;
+    right: 0%;
 
-  color: #ffffff;
-}
-.sidebar {
-  flex-basis: 30%;
-  background-color: var(--color-dark--1);
-  display: flex;
-  flex-direction: column;
-  background-color: #0d2e76c9;
-}
-form
-{
-    color: #ffffff;
-}
+    padding: 10px;
 
-:root {
-  --color-brand--1: #ffb545;
-  --color-brand--2: #00c46a;
+    min-height: 100px; /* Adjust the minimum height as needed */
 
-  --color-dark--1: #2d3439;
-  --color-dark--2: #42484d;
-  --color-light--1: #aaa;
-  --color-light--2: #ececec;
-  --color-light--3: rgb(214, 222, 224);
-}
+    display: flex;
+    flex-direction: column;
+    flex-basis: 30%; /* Adjust the width as needed */
 
-/* GENERAL */
-a:link,
-a:visited {
-  color: var(--color-brand--1);
-}
+    overflow-y: auto; /* Enable vertical scrolling when content overflows */
+    overflow-x: hidden; /* Enable vertical scrolling when content overflows */
 
-.logo {
-  height: 5.2rem;
-  align-self: center;
-  margin-bottom: 4rem;
-}
+    background-color: #0d2e76c9;
 
-.workouts {
-  list-style: none;
-  height: 77vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.workouts::-webkit-scrollbar {
-  width: 0;
-}
-
-.workout {
-  background-color: var(--color-dark--2);
-  border-radius: 5px;
-  padding: 1.5rem 2.25rem;
-  margin-bottom: 1.75rem;
-  cursor: pointer;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 0.75rem 1.5rem;
-}
-.workout--running {
-  border-left: 5px solid var(--color-brand--2);
-}
-.workout--cycling {
-  border-left: 5px solid var(--color-brand--1);
-}
-
-.workout__title {
-  grid-column: 1 / -1;
-}
-
-.workout__details {
-  display: flex;
-  align-items: baseline;
-}
-
-.workout__icon {
-  margin-right: 0.2rem;
-  height: 0.28rem;
-}
-
-.workout__value {
-  margin-right: 0.5rem;
-}
-
-.workout__unit {
-  color: var(--color-light--1);
-  text-transform: uppercase;
-}
-
-.form {
-  background-color: var(--color-dark--2);
-  border-radius: 5px;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  /* Match height and activity boxes */
-  height: 9.25rem;
-  transition: all 0.5s, transform 1ms;
-}
-
-.form.hidden {
-  transform: translateY(-30rem);
-  height: 0;
-  padding: 0 2.25rem;
-  margin-bottom: 0;
-  opacity: 0;
-}
-
-.form__row {
-  display: flex;
-  align-items: center;
-}
-
-.form__label {
-  flex: 0 0 50%;
-}
-
-.form__input {
-  width: 100%;
-  padding: 0.3rem 1.1rem;
-  border: none;
-  border-radius: 3px;
-  background-color: var(--color-light--3);
-  transition: all 0.2s;
-}
-
-.form__input:focus {
-  outline: none;
-  background-color: #fff;
-}
-
-.copyright {
-  margin-top: auto;
-  text-align: center;
-  color: var(--color-light--1);
-}
-
-.twitter-link:link,
-.twitter-link:visited {
-  color: var(--color-light--1);
-  transition: all 0.2s;
-}
-
-.twitter-link:hover,
-.twitter-link:active {
-  color: var(--color-light--2);
-}
-
-/* Popup width is defined in JS using options */
-.leaflet-popup .leaflet-popup-content-wrapper {
-  background-color: var(--color-dark--1);
-  color: var(--color-light--2);
-  border-radius: 5px;
-  padding-right: 0.6rem;
-}
-
-.leaflet-popup .leaflet-popup-content {
-  font-size: 1.5rem;
-}
-
-.leaflet-popup .leaflet-popup-tip {
-  background-color: var(--color-dark--1);
-}
-
-.running-popup .leaflet-popup-content-wrapper {
-  border-left: 5px solid var(--color-brand--2);
-}
-.cycling-popup .leaflet-popup-content-wrapper {
-  border-left: 5px solid var(--color-brand--1);
+    z-index: 1;
+  }
 }
 </style>
