@@ -38,7 +38,7 @@
       <!-- n3 -->
       <div class="workouts">
         <button @click="clearMarkers">Clear All</button>
-        <div v-for="(workouts, index) in markerDataList" :key="workouts" class="workout-items">
+        <div v-for="(workouts, index) in markerDataList" :key="workouts" class="workout-items" @click="zoomToMarker(index)">
           <label>{{workouts.data.Type}}</label>
           <label>{{workouts.data.Distance}}</label>
           <label>{{workouts.data.Duration}}</label>
@@ -236,6 +236,13 @@ export default
           this.map.removeLayer(markerData.marker);
         });
         this.markerDataList.splice(0, this.markerDataList.length)
+      },
+      zoomToMarker(paramIndex) 
+      {
+        if(this.map) 
+        {
+          this.map.flyTo([this.markerDataList[paramIndex].data.Latitude, this.markerDataList[paramIndex].data.Longitude], this.mapZoomLevel);
+        }
       },
     }
 }
