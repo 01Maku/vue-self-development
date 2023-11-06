@@ -4,20 +4,20 @@
         Your browser does not support the audio element.
   </audio>
   <nav>
-      <a @click="playSfx('/home')" @mouseenter="emitPreview('none')" class="router-links">
-        <div @click="playSfx('/home')" @mouseenter="emitPreview('none')">Home</div>
+      <a @click="playSfx('/home')" class="router-links">
+        <div @click="playSfx('/home')">Home</div>
       </a>
-      <a @click="playSfx('/slam-boo')" @mouseenter="emitPreview('SlamBoo')" class="router-links">
-          <div @click="playSfx('/slam-boo')" @mouseenter="emitPreview('SlamBoo')">Slamboo</div>
+      <a @click="playSfx('/slam-boo')" class="router-links">
+          <div @click="playSfx('/slam-boo')">Slamboo</div>
       </a>
-      <a @click="playSfx('/bmi-calculator')" @mouseenter="emitPreview('/bmi-calculator')" class="router-links">
-          <div @click="playSfx('/bmi-calculator')" @mouseenter="emitPreview('/bmi-calculator')">BMI Calculator</div>
+      <a @click="playSfx('/bmi-calculator')" class="router-links">
+          <div @click="playSfx('/bmi-calculator')">BMI Calculator</div>
       </a>
-      <a @click="playSfx('/task-manager')" @mouseenter="emitPreview('/task-manager')" class="router-links">
-          <div @click="playSfx('/task-manager')" @mouseenter="emitPreview('/task-manager')">Task Manager</div>
+      <a @click="playSfx('/task-manager')" class="router-links">
+          <div @click="playSfx('/task-manager')">Task Manager</div>
       </a>
-      <a @click="playSfx('/mapty')" @mouseenter="emitPreview('/mapty')" class="router-links">
-          <div @click="playSfx('/mapty')" @mouseenter="emitPreview('/mapty')">Mapty</div>
+      <a @click="playSfx('/mapty')" class="router-links">
+          <div @click="playSfx('/mapty')">Mapty</div>
       </a>
       <router-link to="/" class="router-links">
         <div>Leave</div>
@@ -27,22 +27,17 @@
 <script>
 export default
 {
-  inject: 
-  [
-    'emitterFunction'
-  ],
+  inject: ['provideLocalActiveUser'],
   methods:
   {
     playSfx(paramLink)
     {
+      console.log(this.provideLocalActiveUser)
+      
       const audio = document.getElementById('buttonClickSFX');
       audio.currentTime = 0;
       audio.play();
       this.$router.push(paramLink);
-    },
-    emitPreview(paramLink)
-    {
-      this.$emit('emittedData', paramLink)
     }
   }
 }

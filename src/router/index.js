@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import NonExistentPage from '@/components/home/NonExistentPage.vue'
 import LogInPage from '@/components/home/LogInPage.vue'
 import HomeView from '@/components/home/HomeView.vue'
 import slamBoo from '@/components/slamboo/slam-boo.vue'
@@ -47,7 +48,12 @@ const routes =
     path: '/mapty',
     name: 'Mapty',
     component: Mapty
-  }
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NonExistentPage',
+    component: NonExistentPage
+  },
 ]
 
 const router = createRouter({

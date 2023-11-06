@@ -8,30 +8,6 @@
     <router-view></router-view>
   </div>
 </template>
-<script>
-export default
-{
-  methods:
-  {
-    emitterFunction(param1, param2)
-    {
-      const emittedObject =
-      {
-        param1: param1,
-        param2: param2,
-      }
-
-      this.$emit('emittedData', emittedObject)
-    }
-  },
-  provide() 
-  {
-    return {
-      emitterFunction: this.emitterFunction,
-    }
-  },
-}
-</script>
 <style scoped>
 video 
 {

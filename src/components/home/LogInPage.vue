@@ -1,42 +1,57 @@
-<template lang="en">
+<template>
     <div class="flex super-container">
         <div class="flex log-in-card border">
             <h1>あなたの名前とパスワードを教えてください</h1>
             <form ref="inputForm" @submit.prevent="validateUser">
-                <input required v-model.trim="nullModelDesignation" type="text" placeholder="username">
-                <input required v-model.trim="nullModelIdentifier" type="password" placeholder="password">
+                <input required v-model.trim="inputUser" type="text" placeholder="username">
+                <input required v-model.trim="inputPass" type="password" placeholder="password">
                 <button>ログイン</button>
             </form>
         </div>
     </div>
 </template>
 <script>
-import {audioService} from '@/components/home/assets/scripts/sfx.js'
+import {userProfiles} from '@/components/home/assets/scripts/userProfiles.js'
 export default
 {
-
     data()
     {
         return{
-            localSfx: audioService,
-            nullModelDesignation: '',
-            nullModelIdentifier: '',
+            localUserProfiles: structuredClone(userProfiles),
+            localActiveUser: null,
+            inputUser: '',
+            inputPass: '',
         } 
+    },
+    provide()
+    {
+        return {
+            provideLocalActiveUser: this.localActiveUser,
+        }
     },
     methods:
     {
         validateUser()
         {
-            if(this.nullModelDesignation == 'Maks' && this.nullModelIdentifier == 'Maks')
+            let accessDenied = true;
+
+            for(const profile of this.localUserProfiles)
             {
-                this.localSfx.playLogSuccess() 
-                alert('Access Granted')
-                this.$router.push('/home')
+                if(profile.user == this.inputUser && profile.pass == this.inputPass)
+                {
+                    accessDenied = false;
+
+                    profile.active = true
+                    this.localActiveUser = profile
+
+                    alert('Access Granted')
+                    this.$router.push('/home')
+                }
             }
-            else
+
+            if (accessDenied) 
             {
-                this.localSfx.playLogDenied() 
-                alert('Access Denied')
+                alert('Access Denied')  
             }
         }
     }

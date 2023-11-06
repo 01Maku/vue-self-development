@@ -1,13 +1,13 @@
 <template lang="en">
-  <div class="flex parent">
+  <div class="parent">
     <div class="nav-window">
-      <nav-bar @emittedData="handlePreview"></nav-bar>
+      <nav-bar></nav-bar>
     </div>
-    <div class="flex main-window">
-      <div class="flex profile-display">
+    <div class="main-window">
+      <div class="profile-display">
         <img src="@/components/home/assets/profile/profile-maks.jpeg">
       </div>
-      <div class="flex description-display">
+      <div class="description-display">
         <p>Hi, Im Maks, I am a Web Developer! Did you know I made this web application, Pretty cool right?</p>
       </div>
     </div>
@@ -38,11 +38,7 @@ export default
   },
   methods:
   {
-    handlePreview(paramObject)
-    {
-      console.log(paramObject)
-      this.componentName = paramObject
-    }
+    
   }
 }
 </script>
@@ -57,10 +53,6 @@ img
   height: auto; 
 }
 /* reusables */
-.flex
-{
-  display: flex;
-}
 .border
 {
   border-width: 2px 2px 2px 2px;
@@ -80,6 +72,7 @@ img
 }
 .main-window
 {
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 
@@ -100,6 +93,7 @@ img
 }
 .profile-display
 {
+  display: flex;
   flex: 0 0 128px;
 
   margin: 10px;
@@ -109,6 +103,7 @@ img
 }
 .description-display
 {
+  display: flex;
   flex: 0 0 calc(100% - 256px);
 
   padding: 10px;
@@ -126,6 +121,7 @@ img
   margin-right: 25%;
   margin-bottom: 5px;
 
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
