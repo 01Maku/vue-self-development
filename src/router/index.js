@@ -8,6 +8,11 @@ import taskManager from '@/components/task-manager/Index.vue'
 import Bankist from '@/components/bankist/Index.vue'
 import Mapty from '@/components/mapty/Index.vue'
 
+function checkAuthorization()
+{
+  return false
+}
+
 const routes = 
 [
   {
@@ -22,37 +27,128 @@ const routes =
   {
     path: '/home',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    beforeEnter: (to, from, next) => 
+    {
+      const isAuthorized = checkAuthorization();
+      if (isAuthorized) 
+      {
+        next();
+      } 
+      else 
+      {
+        alert('You are trying to access a page without authorization')
+        next('/log-in');
+      }
+    }
   },
   {
     path: '/slam-boo',
     name: 'slamBoo',
-    component: slamBoo
+    component: slamBoo,
+    beforeEnter: (to, from, next) => 
+    {
+      const isAuthorized = checkAuthorization();
+      if (isAuthorized) 
+      {
+        next();
+      } 
+      else 
+      {
+        alert('You are trying to access a page without authorization')
+        next('/log-in');
+      }
+    }
   },
   {
     path: '/bmi-calculator',
     name: 'bmiCalculator',
-    component: bmiCalculator
+    component: bmiCalculator,
+    beforeEnter: (to, from, next) => 
+    {
+      const isAuthorized = checkAuthorization();
+      if (isAuthorized) 
+      {
+        next();
+      } 
+      else 
+      {
+        alert('You are trying to access a page without authorization')
+        next('/log-in');
+      }
+    }
   },
   {
     path: '/task-manager',
     name: 'taskManager',
-    component: taskManager
+    component: taskManager,
+    beforeEnter: (to, from, next) => 
+    {
+      const isAuthorized = checkAuthorization();
+      if (isAuthorized) 
+      {
+        next();
+      } 
+      else 
+      {
+        alert('You are trying to access a page without authorization')
+        next('/log-in');
+      }
+    }
   },
   {
     path: '/bankist',
     name: 'Bankist',
-    component: Bankist
+    component: Bankist,
+    beforeEnter: (to, from, next) => 
+    {
+      const isAuthorized = checkAuthorization();
+      if (isAuthorized) 
+      {
+        next();
+      } 
+      else 
+      {
+        alert('You are trying to access a page without authorization')
+        next('/log-in');
+      }
+    }
   },
   {
     path: '/mapty',
     name: 'Mapty',
-    component: Mapty
+    component: Mapty,
+    beforeEnter: (to, from, next) => 
+    {
+      const isAuthorized = checkAuthorization();
+      if (isAuthorized) 
+      {
+        next();
+      } 
+      else 
+      {
+        alert('You are trying to access a page without authorization')
+        next('/log-in');
+      }
+    }
   },
   {
     path: '/:catchAll(.*)',
     name: 'NonExistentPage',
-    component: NonExistentPage
+    component: NonExistentPage,
+    beforeEnter: (to, from, next) => 
+    {
+      const isAuthorized = checkAuthorization();
+      if (isAuthorized) 
+      {
+        next();
+      } 
+      else 
+      {
+        alert('You are trying to access a page without authorization')
+        next('/log-in');
+      }
+    }
   },
 ]
 
