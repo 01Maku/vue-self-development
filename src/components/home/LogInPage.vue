@@ -31,6 +31,10 @@ export default
     },
     methods:
     {
+        function()
+        {
+            return false
+        },  
         validateUser()
         {
             let accessDenied = true;
