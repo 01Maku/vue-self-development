@@ -1,32 +1,61 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import LogIn from '@/components/home/LogInPage.vue';
 
 describe('LogIn', () => 
 {
-    const wrapper = shallowMount(LogIn);
-
-    test('test dummy function', () => 
+    const wrapper = mount(LogIn,
     {
-        expect(wrapper.vm.function()).toBe(false);
+
+    })
+
+    test('Test component if existing', () => 
+    {
+        expect(wrapper.exists()).toBeTruthy();
     });
 
-    test('opens the modal when a function is called', async () => 
+    // <b-button v-b-modal.modal-1>Launch demo modal</b-button>
+    // <b-modal id="modal-1" title="BootstrapVue">
+    //     <p class="my-4">Hello from modal!</p>
+    // </b-modal>
+
+    test('should render the modal after the button click', async () => 
     {
-        const wrapper = mount(MyComponent, 
-        {
-            global: 
-            {
-                stubs: 
-                {
-                    'b-modal': MockModal, // Replace 'b-modal' with the name of the BootstrapVue modal component in your code
-                },
-            },
-        });
+        const wrapper = mount(YourComponent);
+    
+        // Mock the $bvModal.show method
+        const showSpy = jest.spyOn(wrapper.vm.$bvModal, 'show');
+    
+        // Trigger the button click
+        await wrapper.find('b-button').trigger('click');
+    
+        // Wait for the next tick to allow the modal to render
+        await wrapper.vm.$nextTick();
+    
+        // Assert that the modal show method was called with the correct arguments
+        expect(showSpy).toHaveBeenCalledWith('modal-1');
+    
+        // Assert that the modal is rendered in the component
+        expect(wrapper.find('#modal-1').exists()).toBe(true);
+    
+        // Restore the original show method after the test
+        showSpy.mockRestore();
+    });
 
-        // Call the function that opens the modal
-        await wrapper.vm.myFunction();
+    test('Test audio', async () => 
+    {
+        document.getElementById = jest.fn(() => 
+        ({
+            currentTime: 0,
+            play: jest.fn(),
+        }));
 
-        // Assert that the modal is shown
-        expect(wrapper.findComponent(MockModal).isVisible()).toBe(true);
+        const playSpy = jest.spyOn(wrapper.vm.$el.querySelector('#buttonClickSFX'), 'play');
+
+        await wrapper.vm.validateUser();
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.$el.querySelector('#buttonClickSFX').play).toHaveBeenCalled();
+
+        playSpy.mockRestore();
     });
 });

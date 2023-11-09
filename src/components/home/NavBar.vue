@@ -32,8 +32,6 @@ export default
   {
     playSfx(paramLink)
     {
-      console.log(this.provideLocalActiveUser)
-      
       const audio = document.getElementById('buttonClickSFX');
       audio.currentTime = 0;
       audio.play();

@@ -8,6 +8,10 @@
                 <button>ログイン</button>
             </form>
         </div>
+        <audio id="buttonClickSFX" preload="auto">
+            <source src="@/components/home/assets/sfx/nier-sfx-5.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+        </audio>
     </div>
 </template>
 <script>
@@ -31,32 +35,12 @@ export default
     },
     methods:
     {
-        function()
-        {
-            return false
-        },  
         validateUser()
         {
-            let accessDenied = true;
+            const audio = document.getElementById('buttonClickSFX');
+            audio.currentTime = 0;
 
-            for(const profile of this.localUserProfiles)
-            {
-                if(profile.user == this.inputUser && profile.pass == this.inputPass)
-                {
-                    accessDenied = false;
-
-                    profile.active = true
-                    this.localActiveUser = profile
-
-                    alert('Access Granted')
-                    this.$router.push('/home')
-                }
-            }
-
-            if (accessDenied) 
-            {
-                alert('Access Denied')  
-            }
+            audio.play();
         }
     }
 }
