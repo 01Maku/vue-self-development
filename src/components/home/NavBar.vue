@@ -19,12 +19,13 @@
       <a @click="playSfx('/mapty')" class="router-links">
           <div @click="playSfx('/mapty')">Mapty</div>
       </a>
-      <router-link to="/" class="router-links">
-        <div>Leave</div>
-      </router-link>
+      <a @click="playSfx('/'); updateSession();" class="router-links">
+          <div @click="playSfx('/'); updateSession();">Leave</div>
+      </a>
   </nav>
 </template>
 <script>
+import {isLoggedIn} from '@/router/index.js';
 export default
 {
   inject: ['provideLocalActiveUser'],
@@ -36,6 +37,10 @@ export default
       audio.currentTime = 0;
       audio.play();
       this.$router.push(paramLink);
+    },
+    updateSession()
+    {
+      isLoggedIn.isLoggedIn = false;
     }
   }
 }

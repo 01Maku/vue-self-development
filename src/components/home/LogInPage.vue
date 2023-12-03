@@ -12,9 +12,11 @@
             <source src="@/components/home/assets/sfx/nier-sfx-5.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
         </audio>
+        <button @click="printFlag()">see current val</button>
     </div>
 </template>
 <script>
+import {isLoggedIn} from '@/router/index.js';
 import {userProfiles} from '@/components/home/assets/scripts/userProfiles.js'
 export default
 {
@@ -41,6 +43,20 @@ export default
             audio.currentTime = 0;
 
             audio.play();
+
+            if(this.inputPass=="maks" && this.inputUser=="maks")
+            {
+                isLoggedIn.isLoggedIn = true;
+                this.$router.push("/home")
+            }
+            else
+            {
+                alert("incorrect username and password.")
+            }
+        },
+        printFlag()
+        {
+            console.log(isLoggedIn.isLoggedIn)
         }
     }
 }
